@@ -1,9 +1,9 @@
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, boolean, index, serial } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 // Users / Admin Accounts
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   name: text("name").notNull(),
@@ -14,42 +14,42 @@ export const users = sqliteTable("users", {
 });
 
 // Key-Value Site Settings
-export const settings = sqliteTable("settings", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const settings = pgTable("settings", {
+  id: serial("id").primaryKey(),
   key: text("key").notNull().unique(),
   value: text("value").notNull(), // JSON or string text
   group: text("group").notNull().default("general"), // general, appearance, languages, currency, next_shipment, order_mode, fees, notifications, seo, maintenance
-  isTranslatable: integer("is_translatable", { mode: "boolean" }).default(false),
+  isTranslatable: boolean("is_translatable").default(false),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Menus
-export const menus = sqliteTable("menus", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const menus = pgTable("menus", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   location: text("location").notNull(), // header, footer
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const menuItems = sqliteTable("menu_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const menuItems = pgTable("menu_items", {
+  id: serial("id").primaryKey(),
   menuId: integer("menu_id").references(() => menus.id, { onDelete: "cascade" }),
   label: text("label").notNull(), // JSON: { fr: "", ar: "" }
   url: text("url").notNull(),
   icon: text("icon"),
   target: text("target").default("_self"),
   order: integer("order").notNull().default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).default(true),
+  isVisible: boolean("is_visible").default(true),
   parentId: integer("parent_id"),
 });
 
 // Custom Pages
-export const pages = sqliteTable("pages", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const pages = pgTable("pages", {
+  id: serial("id").primaryKey(),
   title: text("title").notNull(), // JSON
   slug: text("slug").notNull().unique(),
   content: text("content").notNull(), // JSON rich text
-  isPublished: integer("is_published", { mode: "boolean" }).default(true),
+  isPublished: boolean("is_published").default(true),
   metaTitle: text("meta_title"), // JSON
   metaDescription: text("meta_description"), // JSON
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
@@ -59,20 +59,20 @@ export const pages = sqliteTable("pages", {
 ]);
 
 // Homepage Sections
-export const homeSections = sqliteTable("home_sections", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const homeSections = pgTable("home_sections", {
+  id: serial("id").primaryKey(),
   sectionKey: text("section_key").notNull().unique(),
   title: text("title").notNull(), // JSON
   subtitle: text("subtitle"), // JSON
   content: text("content"), // JSON config
-  isEnabled: integer("is_enabled", { mode: "boolean" }).default(true),
+  isEnabled: boolean("is_enabled").default(true),
   sortOrder: integer("sort_order").notNull().default(0),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Banners / Hero Slides
-export const banners = sqliteTable("banners", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const banners = pgTable("banners", {
+  id: serial("id").primaryKey(),
   title: text("title").notNull(), // JSON
   subtitle: text("subtitle"), // JSON
   desktopImageUrl: text("desktop_image_url").notNull(),
@@ -81,81 +81,81 @@ export const banners = sqliteTable("banners", {
   buttonUrl: text("button_url"),
   startDate: text("start_date"),
   endDate: text("end_date"),
-  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  isActive: boolean("is_active").default(true),
   sortOrder: integer("sort_order").default(0),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // FAQ Categories & FAQ Items
-export const faqCategories = sqliteTable("faq_categories", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const faqCategories = pgTable("faq_categories", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(), // JSON
   sortOrder: integer("sort_order").default(0),
 });
 
-export const faqs = sqliteTable("faqs", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const faqs = pgTable("faqs", {
+  id: serial("id").primaryKey(),
   categoryId: integer("category_id").references(() => faqCategories.id, { onDelete: "set null" }),
   question: text("question").notNull(), // JSON
   answer: text("answer").notNull(), // JSON
   sortOrder: integer("sort_order").default(0),
-  isPublished: integer("is_published", { mode: "boolean" }).default(true),
+  isPublished: boolean("is_published").default(true),
 });
 
 // Reviews
-export const reviews = sqliteTable("reviews", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const reviews = pgTable("reviews", {
+  id: serial("id").primaryKey(),
   customerName: text("customer_name").notNull(),
   customerAvatar: text("customer_avatar"),
   rating: integer("rating").notNull().default(5),
   content: text("content").notNull(), // JSON
   photoUrl: text("photo_url"),
-  isApproved: integer("is_approved", { mode: "boolean" }).default(true),
+  isApproved: boolean("is_approved").default(true),
   sortOrder: integer("sort_order").default(0),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Instagram Gallery
-export const instagramItems = sqliteTable("instagram_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const instagramItems = pgTable("instagram_items", {
+  id: serial("id").primaryKey(),
   imageUrl: text("image_url").notNull(),
   linkUrl: text("link_url"),
   caption: text("caption"),
   sortOrder: integer("sort_order").default(0),
-  isPublished: integer("is_published", { mode: "boolean" }).default(true),
+  isPublished: boolean("is_published").default(true),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Categories (Nested)
-export const categories = sqliteTable("categories", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(), // JSON
   slug: text("slug").notNull().unique(),
   parentId: integer("parent_id"),
   description: text("description"), // JSON
   imageUrl: text("image_url"),
   sortOrder: integer("sort_order").default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).default(true),
+  isVisible: boolean("is_visible").default(true),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [
   index("idx_categories_slug").on(table.slug),
 ]);
 
 // Brands
-export const brands = sqliteTable("brands", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const brands = pgTable("brands", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   logoUrl: text("logo_url"),
   description: text("description"), // JSON
   sortOrder: integer("sort_order").default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).default(true),
+  isVisible: boolean("is_visible").default(true),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Products (Veloria Select)
-export const products = sqliteTable("products", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(), // JSON
   slug: text("slug").notNull().unique(),
   description: text("description"), // JSON
@@ -168,7 +168,7 @@ export const products = sqliteTable("products", {
   purchasePriceEur: integer("purchase_price_eur").default(0),
   mainImageUrl: text("main_image_url").notNull(),
   galleryUrls: text("gallery_urls").default("[]"), // JSON array of string URLs
-  isStockTracked: integer("is_stock_tracked", { mode: "boolean" }).default(true),
+  isStockTracked: boolean("is_stock_tracked").default(true),
   totalStock: integer("total_stock").notNull().default(0),
   badgeText: text("badge_text"), // JSON e.g. { fr: "Nouveau", ar: "جديد" }
   status: text("status").notNull().default("active"), // active, hidden, out_of_stock
@@ -182,8 +182,8 @@ export const products = sqliteTable("products", {
 ]);
 
 // Product Variants (Shade, Size, etc.)
-export const productVariants = sqliteTable("product_variants", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const productVariants = pgTable("product_variants", {
+  id: serial("id").primaryKey(),
   productId: integer("product_id").notNull().references(() => products.id, { onDelete: "cascade" }),
   name: text("name").notNull(), // JSON e.g. { fr: "Teinte 01", ar: "درجة 01" }
   sku: text("sku"),
@@ -194,8 +194,8 @@ export const productVariants = sqliteTable("product_variants", {
 });
 
 // Shipment Batches
-export const shipments = sqliteTable("shipments", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const shipments = pgTable("shipments", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   departureDate: text("departure_date").notNull(),
   orderDeadline: text("order_deadline").notNull(),
@@ -204,8 +204,8 @@ export const shipments = sqliteTable("shipments", {
 });
 
 // Requests & Orders (Unified)
-export const requests = sqliteTable("requests", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const requests = pgTable("requests", {
+  id: serial("id").primaryKey(),
   type: text("type").notNull(), // 'select' | 'shein' | 'special'
   reference: text("reference").notNull().unique(), // VS-0001, VX-0001, SO-0001
   customerName: text("customer_name").notNull(),
@@ -226,7 +226,7 @@ export const requests = sqliteTable("requests", {
   trackingNumber: text("tracking_number"),
   shipmentId: integer("shipment_id").references(() => shipments.id, { onDelete: "set null" }),
   promoCode: text("promo_code"),
-  isGiftWrapped: integer("is_gift_wrapped", { mode: "boolean" }).default(false),
+  isGiftWrapped: boolean("is_gift_wrapped").default(false),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [
@@ -237,8 +237,8 @@ export const requests = sqliteTable("requests", {
 ]);
 
 // Request Items
-export const requestItems = sqliteTable("request_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const requestItems = pgTable("request_items", {
+  id: serial("id").primaryKey(),
   requestId: integer("request_id").notNull().references(() => requests.id, { onDelete: "cascade" }),
   productId: integer("product_id").references(() => products.id, { onDelete: "set null" }),
   variantId: integer("variant_id").references(() => productVariants.id, { onDelete: "set null" }),
@@ -252,8 +252,8 @@ export const requestItems = sqliteTable("request_items", {
 });
 
 // Request Status History Timeline
-export const requestStatusHistory = sqliteTable("request_status_history", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const requestStatusHistory = pgTable("request_status_history", {
+  id: serial("id").primaryKey(),
   requestId: integer("request_id").notNull().references(() => requests.id, { onDelete: "cascade" }),
   oldStatus: text("old_status"),
   newStatus: text("new_status").notNull(),
@@ -263,8 +263,8 @@ export const requestStatusHistory = sqliteTable("request_status_history", {
 });
 
 // Customers Database
-export const customers = sqliteTable("customers", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const customers = pgTable("customers", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   phone: text("phone").notNull().unique(),
   email: text("email"),
@@ -278,8 +278,8 @@ export const customers = sqliteTable("customers", {
 ]);
 
 // Notification Message Templates
-export const messageTemplates = sqliteTable("message_templates", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const messageTemplates = pgTable("message_templates", {
+  id: serial("id").primaryKey(),
   key: text("key").notNull().unique(), // e.g. status_quote_sent, status_in_transit
   name: text("name").notNull(),
   channel: text("channel").notNull().default("whatsapp"), // whatsapp, email
@@ -289,8 +289,8 @@ export const messageTemplates = sqliteTable("message_templates", {
 });
 
 // Promo Codes
-export const promoCodes = sqliteTable("promo_codes", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const promoCodes = pgTable("promo_codes", {
+  id: serial("id").primaryKey(),
   code: text("code").notNull().unique(),
   discountType: text("discount_type").notNull().default("percent"), // percent, fixed
   discountValue: integer("discount_value").notNull(), // percentage or cents
@@ -299,22 +299,22 @@ export const promoCodes = sqliteTable("promo_codes", {
   usageLimit: integer("usage_limit"),
   timesUsed: integer("times_used").notNull().default(0),
   appliesTo: text("applies_to").notNull().default("all"), // all, select, shein, special
-  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  isActive: boolean("is_active").default(true),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Subscribers (Newsletter & WhatsApp Broadcast)
-export const subscribers = sqliteTable("subscribers", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
   type: text("type").notNull().default("whatsapp"), // whatsapp, email
   contact: text("contact").notNull().unique(), // phone or email
-  isVerified: integer("is_verified", { mode: "boolean" }).default(true),
+  isVerified: boolean("is_verified").default(true),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Activity Log (Audit Trail)
-export const activityLog = sqliteTable("activity_log", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const activityLog = pgTable("activity_log", {
+  id: serial("id").primaryKey(),
   userId: integer("user_id"),
   userName: text("user_name").notNull(),
   action: text("action").notNull(),
