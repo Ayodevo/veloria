@@ -41,7 +41,10 @@ export function Footer({
               <img
                 src={logoUrl || "/logo.png"}
                 alt={siteName || "VELORIA"}
-                className="h-16 sm:h-20 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-sm"
+                className="h-20 sm:h-24 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                style={{
+                  filter: "brightness(1.15) contrast(1.05) drop-shadow(0 2px 12px rgba(180,80,110,0.35))",
+                }}
               />
             </Link>
             <p className="text-xs font-serif italic text-[var(--color-rose-gold)]">

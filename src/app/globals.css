@@ -1,26 +1,329 @@
 @import "tailwindcss";
 
+/* ============================================
+   VELORIA — Global Design System
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdf6f0;
+  --foreground: #3d1a2e;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter, system-ui, sans-serif);
+  --font-serif: var(--font-playfair, Georgia, serif);
+  --font-cormorant: var(--font-cormorant, Georgia, serif);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Utility class for romantic italic headings */
+.font-script {
+  font-family: var(--font-cormorant, 'Cormorant Garamond', Georgia, serif);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   BUTTERFLY HERO ANIMATIONS
+   ============================================ */
+
+.veloria-hero {
+  background: linear-gradient(135deg, #2d0a1a 0%, #8b2252 50%, #d4849e 100%);
+}
+
+.veloria-hero-bg {
+  transform-origin: center center;
+  animation: heroZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.veloria-title-glow {
+  background: linear-gradient(135deg, #ffffff 0%, #f8d7e3 30%, #e8a0bb 60%, #f0c8d8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(232, 160, 187, 0.4));
+  animation: titlePulse 4s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { filter: drop-shadow(0 0 30px rgba(232, 160, 187, 0.4)); }
+  50% { filter: drop-shadow(0 0 50px rgba(232, 160, 187, 0.7)); }
+}
+
+.veloria-cta-btn {
+  background: linear-gradient(135deg, #c4607a 0%, #e891aa 50%, #c4607a 100%);
+  background-size: 200% 100%;
+  color: white;
+  box-shadow: 0 8px 32px rgba(196, 96, 122, 0.4), 0 0 0 1px rgba(255,255,255,0.15) inset;
+  animation: btnShimmer 3s ease-in-out infinite;
+}
+
+.veloria-cta-btn:hover {
+  background-position: right center;
+  box-shadow: 0 12px 40px rgba(196, 96, 122, 0.6);
+  transform: translateY(-2px) scale(1.02);
+}
+
+@keyframes btnShimmer {
+  0%, 100% { background-position: left center; }
+  50% { background-position: right center; }
+}
+
+/* Sparkle particles */
+.veloria-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 200, 220, 0.9) 0%, transparent 70%);
+  animation: sparkleFloat linear infinite;
+}
+
+@keyframes sparkleFloat {
+  0% { opacity: 0; transform: translateY(0) scale(0); }
+  20% { opacity: 1; transform: translateY(-20px) scale(1); }
+  80% { opacity: 0.5; transform: translateY(-60px) scale(0.8); }
+  100% { opacity: 0; transform: translateY(-100px) scale(0); }
+}
+
+@keyframes fadeInUp {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   OUTLINE BUTTON (hover via pure CSS)
+   ============================================ */
+
+.veloria-outline-btn {
+  color: #b06070;
+  border-color: #d090a0;
+}
+
+.veloria-outline-btn:hover {
+  color: white;
+  background: #c4607a;
+  border-color: #c4607a;
+}
+
+/* ============================================
+   FEATURE CARDS
+   ============================================ */
+
+.veloria-feature-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(196, 96, 122, 0.15);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.veloria-feature-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(196, 96, 122, 0.4);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(196, 96, 122, 0.15), 0 0 0 1px rgba(196, 96, 122, 0.1);
+}
+
+/* ============================================
+   PRODUCT CARDS
+   ============================================ */
+
+.veloria-product-card {
+  background: white;
+  border: 1px solid rgba(232, 180, 200, 0.3);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.veloria-product-card:hover {
+  border-color: rgba(196, 96, 122, 0.5);
+  box-shadow: 0 24px 48px rgba(196, 96, 122, 0.12), 0 8px 16px rgba(196, 96, 122, 0.08);
+  transform: translateY(-8px);
+}
+
+/* ============================================
+   SECTION HEADINGS
+   ============================================ */
+
+.veloria-section-title {
+  background: linear-gradient(135deg, #8b2252 0%, #c4607a 50%, #e891aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   ADMIN DASHBOARD ENHANCEMENTS
+   ============================================ */
+
+.admin-kpi-card {
+  background: linear-gradient(135deg, rgba(30, 15, 25, 0.95) 0%, rgba(20, 10, 18, 0.98) 100%);
+  border: 1px solid rgba(232, 160, 187, 0.12);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(196, 96, 122, 0.6), transparent);
+  animation: adminCardShine 3s ease-in-out infinite;
+}
+
+@keyframes adminCardShine {
+  0% { opacity: 0; transform: translateX(-100%); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+
+.admin-kpi-card:hover {
+  border-color: rgba(196, 96, 122, 0.3);
+  box-shadow: 0 8px 32px rgba(196, 96, 122, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Glowing number in admin cards */
+.admin-stat-number {
+  background: linear-gradient(135deg, #f8d7e3 0%, #e891aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 8px rgba(232, 145, 170, 0.3));
+}
+
+/* Admin sidebar glow on active */
+.admin-nav-active {
+  background: linear-gradient(90deg, rgba(196, 96, 122, 0.2) 0%, rgba(196, 96, 122, 0.05) 100%);
+  border: 1px solid rgba(196, 96, 122, 0.3);
+  box-shadow: inset 0 0 20px rgba(196, 96, 122, 0.05);
+}
+
+/* ============================================
+   SECTION DECORATIONS  
+   ============================================ */
+
+.veloria-section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196, 96, 122, 0.4), transparent);
+}
+
+/* ============================================
+   SCROLL REVEAL (used with JS)
+   ============================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered delays */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================
+   FLOATING BUTTERFLY DECORATION  
+   ============================================ */
+
+@keyframes butterflyFloat {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  25% { transform: translateY(-12px) rotate(5deg); }
+  75% { transform: translateY(8px) rotate(-3deg); }
+}
+
+.butterfly-float {
+  animation: butterflyFloat 6s ease-in-out infinite;
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.veloria-link {
+  position: relative;
+}
+
+.veloria-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #c4607a, #e891aa);
+  transition: width 0.3s ease;
+}
+
+.veloria-link:hover::after {
+  width: 100%;
+}
+
+/* ============================================
+   GLASSMORPHISM
+   ============================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fdf6f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c4607a, #e891aa);
+  border-radius: 3px;
+}
+
+/* ============================================
+   PULSE BADGE
+   ============================================ */
+
+.veloria-pulse-badge {
+  animation: pulseBadge 2s ease-in-out infinite;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 96, 122, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(196, 96, 122, 0); }
 }

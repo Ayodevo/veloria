@@ -10,6 +10,8 @@ import { Footer } from "@/components/Footer";
 import { CartDrawer } from "@/components/CartDrawer";
 import { MobileBottomBar } from "@/components/MobileBottomBar";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { ShipmentBanner } from "@/components/ShipmentBanner";
+import { FloatingButterflies } from "@/components/FloatingButterflies";
 
 interface PublicPageWrapperProps {
   settings: SiteSettings;
@@ -23,16 +25,22 @@ export function PublicPageWrapper({ settings, children }: PublicPageWrapperProps
     <LanguageProvider>
       <CartProvider>
         <ThemeInjector settings={settings} />
-        <div 
+        <div
           className="min-h-screen flex flex-col text-[var(--color-rose-brown)] font-sans antialiased selection:bg-[var(--color-powder-pink)] selection:text-[var(--color-deep-rose-gold)]"
           style={{ backgroundColor: "var(--color-ivory)" }}
         >
-          <Header
-            siteName={settings.site_name}
-            logoUrl={settings.logo_url}
-            tagline={settings.site_tagline}
-            onOpenCart={() => setIsCartOpen(true)}
-          />
+          {/* 🦋 Global 3D butterfly animations — fixed, pointer-events:none */}
+          <FloatingButterflies count={9} />
+          {/* ── STICKY TOP BLOCK: banner + header together ── */}
+          <div className="sticky top-0 z-40">
+            <ShipmentBanner nextShipment={settings.next_shipment} />
+            <Header
+              siteName={settings.site_name}
+              logoUrl={settings.logo_url}
+              tagline={settings.site_tagline}
+              onOpenCart={() => setIsCartOpen(true)}
+            />
+          </div>
 
           <main className="flex-1">{children}</main>
 
